@@ -266,12 +266,12 @@ namespace chatbot
                         Console.WriteLine("Invalid input. Please enter a number.");
                         continue;
                     }
-                    choice -= 1;
-                    if (choice < 0 || choice >= histories.Count)
+                    if (choice < 1 || choice > histories.Count)
                     {
                         Console.WriteLine("Invalid selection. Please try again.");
                         continue;
                     }
+                    choice -= 1;
                 } while (choice < 0 || choice >= histories.Count);
 
                 Console.WriteLine("\nContinuing in " + histories[choice].Replace(".json", "") + " ...\n(model: "
