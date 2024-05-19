@@ -119,7 +119,7 @@ namespace chatbot.MemoryManagers
         /// </summary>
         private void SummarizeHistory()
         {
-            string chatHistoryContext = GetHistoryContext(maxContextTokens - 50);
+            string chatHistoryContext = GetHistoryContext(maxContextTokens / 2);
             if (chatHistoryContext.Length > 0)
             {
                 context[0] = chatManager.Summarize(chatHistoryContext);

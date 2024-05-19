@@ -166,7 +166,7 @@ namespace chatbot
             }
 
             chatHistoryManager.StoreChatHistory(sessionId, memoryManager.GetChatHistory(),
-                memoryManager.GetContext(this.maxTokens - 50));
+                memoryManager.GetContext(this.maxTokens / 2));
             sessionId = null; // Clear session id after storing the history
         }
 
@@ -275,7 +275,7 @@ namespace chatbot
         /// <returns>The maximum number of tokens allowed for the given context.</returns>
         private int GetMaxTokensForContext(string input)
         {
-            return maxTokens - input.Split(" ").Length - 50;
+            return maxTokens / 2 - input.Split(" ").Length;
         }
 
         /// <summary>

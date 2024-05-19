@@ -316,7 +316,7 @@ namespace chatbot
                     if (input != null)
                     {
                         int tokenCount = input.Split(' ').Length;
-                        if (tokenCount > maxTokens - 50)
+                        if (tokenCount > maxTokens / 2)
                         {
                             Console.WriteLine("Message too long. Please try again.");
                         }
