@@ -5,7 +5,7 @@ using System.Linq;
 namespace chatbot.MemoryManagers
 {
     /// <summary>
-    /// The <c>BufferMemoryManager</c> class implements the <c>IMemoryManager</c> interface and
+    /// The <c>BufferMemoryManager</c> class extends the <c>MemoryManager</c> abstract class and
     /// represents a memory manager that stores chat history in a buffer.
     /// It keeps track of the chat history and provides methods to add messages,
     /// retrieve context, and reset the memory.

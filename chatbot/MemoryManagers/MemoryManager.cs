@@ -1,5 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace chatbot.MemoryManagers
 {
+    /// <summary>
+    /// Represents an abstract base class for memory managers in the chatbot system that 
+    /// implements <c>IMemoryManager</c> inferface.
+    /// </summary>
     public abstract class MemoryManager : IMemoryManager
     {
         protected LinkedList<string> chatHistory = new LinkedList<string>();
@@ -39,7 +47,7 @@ namespace chatbot.MemoryManagers
 
         /// <summary>
         /// This method is called when the end of an AI message is received.
-        /// It is not necessary for the BufferMemoryManager implementation, so it does nothing.
+        /// It does nothing in default.
         /// </summary>
         public virtual void ReceivedEndAIMessage()
         {
@@ -47,7 +55,7 @@ namespace chatbot.MemoryManagers
         }
 
         /// <summary>
-        /// This method is here only because of the interface; context is taken from history.
+        /// This method is called when the context is set. In default, it does nothing.
         /// </summary>
         /// <param name="context">The context to be set.</param>
         public virtual void SetContext(List<string> context)

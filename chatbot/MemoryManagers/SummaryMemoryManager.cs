@@ -5,8 +5,8 @@ using System.Linq;
 namespace chatbot.MemoryManagers
 {
     /// <summary>
-    /// The <c>SummaryMemoryManager</c> class implements the <c>IMemoryManager</c> interface and
-    /// represents the memory component of a chatbot.
+    /// The <c>SummaryMemoryManager</c> class extends the <c>MemoryManager</c> abstract class and
+    /// represents the memory component of a chatbot that summarizes the history.
     /// It keeps track of the chat history, context, and provides methods to
     /// manipulate and retrieve the chat history and context.
     /// </summary>
