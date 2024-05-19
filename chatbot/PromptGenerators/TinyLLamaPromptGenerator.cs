@@ -30,7 +30,7 @@ namespace chatbot.PromptGenerators
         /// <returns>The generated prompt.</returns>
         public override string GeneratePrompt(string userInput, string context)
         {
-            string pattern = "\n{0}\n{1}\n\n{2}\n";
+            string pattern = "<|system|>\n{0}\n{1}\n<|user|>\n{2}\n<|assistant|>";
             return string.Format(pattern, this.systemPrompt, context, userInput);
         }
 
@@ -41,7 +41,7 @@ namespace chatbot.PromptGenerators
         /// <returns>The generated prompt for chat summarization.</returns>
         public override string GetSummarizePrompt(string userInput)
         {
-            string pattern = "\nYou are chat summarization bot.\n\nSummarize: {0}\n";
+            string pattern = "<|system|>\nYou are chat summarization bot.\n<|user|>\nSummarize: {0}\n<|assistant|>";
             return string.Format(pattern, userInput);
         }
     }

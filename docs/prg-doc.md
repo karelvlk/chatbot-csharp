@@ -210,7 +210,7 @@ The `ChatManager` class is responsible for managing the chat functionality of th
 
 **`int GetMaxTokensForContext(string input)`**
 
-- **Summary:** Returns the maximum number of tokens allowed for a given input context. The maximum number of tokens is calculated by subtracting the length of the input string (split by spaces) from the maximum tokens value, and then subtracting an additional 30 tokens.
+- **Summary:** Returns the maximum number of tokens allowed for a given input context. The maximum number of tokens is calculated by subtracting the length of the input string (split by spaces) from the maximum tokens value, and then subtracting an additional 50 tokens.
 - **Parameters:**
   - `input`: The input string representing the context.
 - **Returns:** The maximum number of tokens allowed for the given context.
