@@ -8,7 +8,14 @@ namespace chatbot
     /// </summary>
     public enum UIState
     {
-        COMMAND, CHAT
+        /// <summary>
+        /// UI state where the app is waiting for command input.
+        /// </summary>
+        COMMAND,
+        /// <summary>
+        /// UI state while chatting that waiting for user inputs for LLM together with commands.
+        /// </summary>
+        CHAT
     }
 
     /// <summary>

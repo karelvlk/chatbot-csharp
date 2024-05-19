@@ -10,6 +10,9 @@ namespace chatbot.MemoryManagers
     /// </summary>
     public abstract class MemoryManager : IMemoryManager
     {
+        /// <summary>
+        /// List of strings representing the chat history.
+        /// </summary>
         protected LinkedList<string> chatHistory = new LinkedList<string>();
 
         /// <summary>

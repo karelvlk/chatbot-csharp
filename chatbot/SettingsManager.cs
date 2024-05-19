@@ -12,8 +12,17 @@ namespace chatbot
     /// </summary>
     public enum MemoryType
     {
-        BUFFER, SUMMARY
+        /// <summary>
+        /// Buffer memory type using chat history buffer to remember up to max tokens.
+        /// </summary>
+        BUFFER,
+
+        /// <summary>
+        /// Summary memory type using only summaries provided by LLM from chat history.
+        /// </summary>
+        SUMMARY
     }
+
 
     /// <summary>
     /// Represents the type of model used in the chatbot.
@@ -21,7 +30,14 @@ namespace chatbot
     /// </summary>
     public enum ModelType
     {
-        PHI2, TINYLLAMA
+        /// <summary>
+        /// Microsoft's PHI2 model.
+        /// </summary>
+        PHI2,
+        /// <summary>
+        /// TinyLlama model.
+        /// </summary>
+        TINYLLAMA
     }
 
     /// <summary>
@@ -84,7 +100,7 @@ namespace chatbot
         /// </summary>
         private IConfigurationRoot SetDefaultSettings()
         {
-            var defaultSettings = new Dictionary<string, string>
+            var defaultSettings = new Dictionary<string, string?>
             {
                 ["baseUrl"] = "http://server:9000",
                 ["model"] = "Phi2",
@@ -110,6 +126,13 @@ namespace chatbot
         {
             try
             {
+                // Ensure the directory exists
+                string? directory = Path.GetDirectoryName(settingsPath);
+                if (directory != null && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
                 var configuration = new ConfigurationBuilder()
                     .AddInMemoryCollection(settings.AsEnumerable())
                     .Build();
@@ -120,6 +143,7 @@ namespace chatbot
             catch (Exception e)
             {
                 Console.Error.WriteLine("Error saving settings: " + e.Message);
+                // Consider using a logger here
             }
         }
 
