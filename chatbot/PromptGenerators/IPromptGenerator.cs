@@ -1,6 +1,6 @@
 using System;
 
-namespace chatbot.PromptGenerator
+namespace chatbot.PromptGenerators
 {
     /// <summary>
     /// The IPromptGenerator interface provides methods for generating prompts in a chatbot.

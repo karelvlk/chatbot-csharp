@@ -2,64 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace chatbot.Memory
+namespace chatbot.MemoryManagers
 {
     /// <summary>
-    /// The <c>SummaryMemory</c> class implements the <c>IMemoryManager</c> interface and
+    /// The <c>SummaryMemoryManager</c> class implements the <c>IMemoryManager</c> interface and
     /// represents the memory component of a chatbot.
     /// It keeps track of the chat history, context, and provides methods to
     /// manipulate and retrieve the chat history and context.
     /// </summary>
-    public class SummaryMemory : IMemoryManager
+    public class SummaryMemoryManager : MemoryManager
     {
-        private LinkedList<string> chatHistory = new LinkedList<string>();
         private string[] context = new string[] { "" };
         private ChatManager chatManager;
         private int maxContextTokens;
 
         /// <summary>
-        /// Constructs a new SummaryMemory object with the specified maximum context
+        /// Constructs a new SummaryMemoryManager object with the specified maximum context
         /// tokens and chat manager.
         /// </summary>
         /// <param name="maxContextTokens">The maximum number of context tokens to store.</param>
         /// <param name="chatManager">The chat manager associated with this memory.</param>
-        public SummaryMemory(int maxContextTokens, ChatManager chatManager)
+        public SummaryMemoryManager(int maxContextTokens, ChatManager chatManager)
         {
             this.maxContextTokens = maxContextTokens;
             this.chatManager = chatManager;
-        }
-
-        /// <summary>
-        /// Resets the summary memory by clearing the chat history.
-        /// </summary>
-        public void Reset()
-        {
-            chatHistory.Clear();
-        }
-
-        /// <summary>
-        /// Adds a new message to the chat history.
-        /// If the last message in the chat history is "AI: " (added before calling LLM)
-        /// and the new message is not from the user, the new message is concatenated to
-        /// the last message because it must be in format Who: What. Otherwise, the new
-        /// message is added as a separate entry in the chat history.
-        /// </summary>
-        /// <param name="message">The message to be added to the chat history.</param>
-        public void AddMessage(string message)
-        {
-            if (chatHistory.Any() &&
-                 ((chatHistory.Last?.Value.Equals("AI: ") == true) ||
-                 (chatHistory.Last?.Value.StartsWith("AI: ") == true && !message.StartsWith("User: "))))
-            {
-                // Concatenate the new message to the last message
-                string lastMessage = chatHistory.Last.Value;
-                chatHistory.RemoveLast();
-                chatHistory.AddLast(lastMessage + " " + message);
-            }
-            else
-            {
-                chatHistory.AddLast(message);
-            }
         }
 
         /// <summary>
@@ -67,7 +33,7 @@ namespace chatbot.Memory
         /// </summary>
         /// <param name="maxContextTokens">The maximum number of context tokens to include.</param>
         /// <returns>The context string.</returns>
-        public string GetContextString(int maxContextTokens)
+        public override string GetContextString(int maxContextTokens)
         {
             return this.context[0];
         }
@@ -77,7 +43,7 @@ namespace chatbot.Memory
         /// </summary>
         /// <param name="maxContextTokens">The maximum number of context tokens to retrieve.</param>
         /// <returns>A list of strings of size 1 representing the context.</returns>
-        public List<string> GetContext(int maxContextTokens)
+        public override List<string> GetContext(int maxContextTokens)
         {
             List<string> contextList = new List<string>();
             contextList.Add(context[0]);
@@ -85,32 +51,14 @@ namespace chatbot.Memory
         }
 
         /// <summary>
-        /// Returns the chat history as a list of strings.
-        /// </summary>
-        /// <returns>The chat history as a list of strings.</returns>
-        public List<string> GetChatHistory()
-        {
-            return new List<string>(chatHistory);
-        }
-
-        /// <summary>
-        /// Sets the chat history of the SummaryMemory object.
-        /// </summary>
-        /// <param name="chatHistory">The list of strings representing the chat history.</param>
-        public void SetChatHistory(List<string> chatHistory)
-        {
-            this.chatHistory = new LinkedList<string>(chatHistory);
-        }
-
-        /// <summary>
-        /// Sets the context for the SummaryMemory.
+        /// Sets the context for the SummaryMemoryManager.
         /// If the context size is less than or equal to 1, the first element of the
         /// context list is stored in the context array.
         /// If the context size is 0, an empty string is stored in the context array.
         /// If the context size is greater than 1, the history is summarized by LLM.
         /// </summary>
         /// <param name="context">The list of strings representing the context.</param>
-        public void SetContext(List<string> context)
+        public override void SetContext(List<string> context)
         {
             if (context.Count <= 1)
             {
@@ -120,6 +68,15 @@ namespace chatbot.Memory
             {
                 SummarizeHistory();
             }
+        }
+
+        /// <summary>
+        /// This method is called when an end AI message is received.
+        /// It triggers the summarization of the chat history.
+        /// </summary>
+        public override void ReceivedEndAIMessage()
+        {
+            SummarizeHistory();
         }
 
         /// <summary>
@@ -171,15 +128,6 @@ namespace chatbot.Memory
             {
                 context[0] = "";
             }
-        }
-
-        /// <summary>
-        /// This method is called when an end AI message is received.
-        /// It triggers the summarization of the chat history.
-        /// </summary>
-        public void ReceivedEndAIMessage()
-        {
-            SummarizeHistory();
         }
     }
 }

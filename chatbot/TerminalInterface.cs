@@ -372,7 +372,7 @@ namespace chatbot
                 }
             } while (option < 1 || option > 2);
 
-            string choosenMemory = option == 1 ? "Summary" : "Buffer";
+            string choosenMemory = option == 1 ? "Buffer" : "Summary";
             if (option == 1)
             {
                 getChatManager().UpdateMemory(MemoryType.BUFFER);

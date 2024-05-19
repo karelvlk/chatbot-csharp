@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace chatbot.Memory
+namespace chatbot.MemoryManagers
 {
     /// <summary>
     /// The <c>IMemoryManager</c> interface represents a memory manager for a chatbot.

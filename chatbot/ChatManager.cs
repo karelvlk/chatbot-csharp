@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using chatbot.Memory;
-using chatbot.PromptGenerator;
+using chatbot.MemoryManagers;
+using chatbot.PromptGenerators;
 
 namespace chatbot
 {
@@ -37,7 +37,7 @@ namespace chatbot
         public ChatManager(SettingsManager settingsManager, IMessageConsumer messageConsumer)
         {
             this.maxTokens = int.Parse(settingsManager.GetSetting("maxTotalTokens"));
-            this.memoryManager = BuildIMemoryManager(settingsManager);
+            this.memoryManager = BuildMemoryManager(settingsManager);
             this.chatHistoryManager = BuildChatHistoryManager(settingsManager);
             this.promptGenerator = BuildPromptGenerator(settingsManager);
             this.messageConsumer = new MessageConsumerWithStopAnimation(messageConsumer, this); // Initialize the message consumer
@@ -60,7 +60,7 @@ namespace chatbot
         /// </summary>
         /// <param name="settingsManager">The settings manager to be used by the <c>PromptGenerator</c>.</param>
         /// <returns>An instance of the <c>PromptGenerator</c> class.</returns>
-        private IPromptGenerator BuildPromptGenerator(SettingsManager settingsManager)
+        private PromptGenerator BuildPromptGenerator(SettingsManager settingsManager)
         {
             if (settingsManager.GetSetting("model").Contains("Phi2"))
             {
@@ -87,19 +87,19 @@ namespace chatbot
         }
 
         /// <summary>
-        /// Builds and returns an instance of the <c>IMemoryManager</c> class based on the memory type.
+        /// Builds and returns an instance of the <c>MemoryManager</c> class based on the memory type.
         /// </summary>
         /// <param name="settingsManager">The settings manager to be used by the <c>IMemoryManager</c>.</param>
-        /// <returns>An instance of the IMemoryManager class.</returns>
-        private IMemoryManager BuildIMemoryManager(SettingsManager settingsManager)
+        /// <returns>An instance of the MemoryManager class.</returns>
+        private MemoryManager BuildMemoryManager(SettingsManager settingsManager)
         {
             if (settingsManager.GetSetting("memory").Equals("summary"))
             {
-                return new SummaryMemory(this.maxTokens, this);
+                return new SummaryMemoryManager(this.maxTokens, this);
             }
             else if (settingsManager.GetSetting("memory").Equals("buffer"))
             {
-                return new BufferMemory();
+                return new BufferMemoryManager();
             }
             else
             {
@@ -150,7 +150,7 @@ namespace chatbot
         {
             settingsManager.UpdateMemory(memory);
             EndChatSession();
-            memoryManager = BuildIMemoryManager(settingsManager);
+            memoryManager = BuildMemoryManager(settingsManager);
             StartChatSession();
         }
 
@@ -253,10 +253,11 @@ namespace chatbot
         {
             try
             {
+                string prompt = promptGenerator.GeneratePrompt(input, memoryManager.GetContextString(GetMaxTokensForContext(input)));
                 AddToHistory("User: " + input);
                 messageConsumer.AcceptMessage("AI: ");
                 StartLoadingAnimation();
-                ProcessMessage(input);
+                llmClient.SendQuery(prompt);
             }
             catch (Exception e)
             {
@@ -287,19 +288,6 @@ namespace chatbot
         {
             string prompt = promptGenerator.GetSummarizePrompt(input);
             return llmClient.SendQuerySync(prompt);
-        }
-
-        /// <summary>
-        /// Processes the input message by creating the prompt from it and send this to
-        /// LLM.
-        /// </summary>
-        /// <param name="input">The input message to be processed.</param>
-        private void ProcessMessage(string input)
-        {
-            // Example processing, could be more complex involving LLMClient
-            string prompt = promptGenerator.GeneratePrompt(input,
-                memoryManager.GetContextString(GetMaxTokensForContext(input)));
-            llmClient.SendQuery(prompt);
         }
 
         /// <summary>

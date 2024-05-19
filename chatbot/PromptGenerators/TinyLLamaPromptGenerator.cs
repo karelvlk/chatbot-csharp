@@ -1,6 +1,6 @@
 using System;
 
-namespace chatbot.PromptGenerator
+namespace chatbot.PromptGenerators
 {
     /// <summary>
     /// This class represents a prompt generator for the TinyLLama chatbot.
