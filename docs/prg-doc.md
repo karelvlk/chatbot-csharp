@@ -20,7 +20,7 @@ The system is designed with a clear separation of concerns, leveraging object-or
 - **MemoryManager**: Manages short-term and long-term memory for maintaining context during conversations. Includes subclasses like BufferMemory and SummaryMemory.
 - **PromptGenerator**: Generates prompts for the LLM based on user input and context from MemoryManager.
 
-**NOTE**: The documentation below, describing modules, classes, and methods, is based on the `chatbot.xml` file. This file was generated from XML documentation comments within the code. It was created using OpenAI's ChatGPT-4o model, and while it aims for accuracy, there may be some errors or inconsistencies.
+**NOTE**: The documentation below, describing modules, classes, and methods, is based on the `chatbot.xml` file. This file was generated from XML documentation comments within the code. This human readable markdown was created using OpenAI's ChatGPT-4o model, and while it aims for accuracy, there may be some errors or inconsistencies.
 
 ---
 
